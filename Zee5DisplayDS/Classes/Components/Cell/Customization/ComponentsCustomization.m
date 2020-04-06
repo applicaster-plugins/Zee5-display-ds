@@ -10,9 +10,9 @@
 #import <ApplicasterSDK/APAtomEntry.h>
 #import <ApplicasterSDK/APAtomFeed.h>
 #import <ApplicasterSDK/APCategory.h>
-#import <ZeeHomeScreen/AbstractModel.h>
-#import <ZeeHomeScreen/CommandPattern.h>
-#import <ZeeHomeScreen/ZeeHomeScreen-Swift.h>
+#import <Zee5DisplayDS/AbstractModel.h>
+#import <Zee5DisplayDS/CommandPattern.h>
+#import <Zee5DisplayDS/Zee5DisplayDS-Swift.h>
 @import ApplicasterSDK;
 
 @implementation ComponentsCustomization
@@ -21,7 +21,7 @@
                 forScreen:(NSString *)screenId
                  forModel:(NSObject *)model
                   withKey:(NSString *)key {
-    
+
     if ([screenId isNotEmptyOrWhiteSpaces]) {
         NSDictionary *customDict = [self customizationDictionaryFromDictionary:dictionary
                                                                       screenId:screenId
@@ -49,7 +49,7 @@
     if ([key rangeOfString:@"/"].location != NSNotFound) {
         keyPathes = [key componentsSeparatedByString:@"/"];
     }
-    
+
     if ([dictionary[@"header_cell"] isKindOfClass:[NSDictionary class]] &&
         componentModel == YES) {
         NSDictionary *headerDict = dictionary[@"header_cell"];
@@ -80,7 +80,7 @@
     }
     else if ([model isNotEmpty]) {
         NSDictionary *modelData = nil;
-        
+
         NSDictionary *customDict = [self customizationDictionaryFromDictionary:dictionary
                                                                          model:model
                                                                         prefix:ModelPrefixALL];
@@ -120,12 +120,12 @@
                 modelData = [self extractModelForProgramAccordingToState: programItem modelData:modelData];
             }
         }
-        
+
         if (modelData[key]) {
             retVal = modelData[key];
         }
     }
-    
+
     if ([CommandPattern hasCommandInObject:retVal]) {
         APModel *modelInstance = nil;
         NSDictionary *modelObject = nil;
@@ -144,7 +144,7 @@
 
 + (NSDictionary *)extractModelForProgramAccordingToState:(NSObject <APProgramProtocol> *)program
                                                modelData:(NSDictionary *) modelData {
-    
+
     // Live Program
     if ([program isPlaying]) {
         if (modelData[@"live_state"]) {
@@ -172,7 +172,7 @@
     NSDictionary *retVal = nil;
     NSArray *prefixesArray = [self arrayOfPrefixesByPrefix:prefix
                                                forScreenId:screenId];
-    
+
     for (NSString *searchedKey in prefixesArray) {
         if (dictionary[searchedKey]) {
             retVal = dictionary[searchedKey];
@@ -189,7 +189,7 @@
     NSDictionary *retVal = nil;
     NSArray *prefixesArray = [self arrayOfPrefixesByPrefix:prefix
                                                   forModel:model];
-    
+
     for (NSString *searchedKey in prefixesArray) {
         if (dictionary[searchedKey]) {
             retVal = dictionary[searchedKey];
@@ -221,7 +221,7 @@
         case ModelPrefixNone:
             break;
         case ModelPrefixID:
-            
+
             if ([modelInstance isKindOfClass:[APModel class]] && [modelInstance respondsToSelector:@selector(uniqueID)]) {
                 [retVal addObject:[NSString stringWithFormat:@"id.%@",modelInstance.uniqueID]];
             }

@@ -5,10 +5,11 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
                       Zee5 Display DS
                        DESC
-  s.homepage         = 'https://github.com/applicaster-plugins/Zee5-display-ds'
+  s.homepage         = 'https://github.com/applicaster-plugins/Zee5-display-ds.git'
   s.license          = 'CMPS'
   s.author           = { "cmps" => "m.vecselboim@applicaster.com" }
   s.source           = { :git => 'git@github.com:applicaster-plugins/Zee5-display-ds.git', :tag => s.version.to_s }
+
   s.platform     = :ios, '10.0'
   s.requires_arc = true
 

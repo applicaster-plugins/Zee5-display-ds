@@ -7,8 +7,8 @@
 
 #import "CarouselViewController.h"
 #import "UniversalCollectionViewCell.h"
-#import <ZeeHomeScreen/ZeeHomeScreen-Swift.h>
-#import <ZeeHomeScreen/ComponenttFactory.h>
+#import <Zee5DisplayDS/Zee5DisplayDS-Swift.h>
+#import <Zee5DisplayDS/ComponenttFactory.h>
 @import ApplicasterUIKit;
 @import ApplicasterSDK;
 
@@ -32,7 +32,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
 
 - (void)prepareComponentForReuse {
     [self removeObservers];
-    
+
     _componentModel = nil;
     _componentDataSourceModel = nil;
     _dataSource = nil;
@@ -51,10 +51,10 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
 
 - (void)setComponentModel:(ComponentModel *)model {
     _componentModel = model;
-    
+
     [self removeObservers];
     [self addObservers];
-    
+
     [self reloadComponent];
 }
 
@@ -74,7 +74,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
         if ([visibleCell isKindOfClass:[UniversalCollectionViewCell class]]) {
             UniversalCollectionViewCell *universalCollectionViewCell = (UniversalCollectionViewCell *)visibleCell;
             if ([universalCollectionViewCell.componentViewController respondsToSelector:@selector(didEndDisplayingWithReason:)]) {
-               
+
                 [universalCollectionViewCell.componentViewController didEndDisplayingWith:reason];
             }
         }
@@ -97,7 +97,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
 }
 
 - (void)reloadComponent {
-    
+
     if (self.componentInitialized) {
         if (self.fallbackComponent) {
             self.fallbackComponent = nil;
@@ -105,15 +105,15 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
             _componentDataSourceModel = nil;
             _dataSource = nil;
         }
-        
-        
+
+
         // TODO: LOAD CHILDEREN CAROASEL DATA
-        
+
         if ([self.componentModel.dsUrl isNotEmptyOrWhiteSpaces]) {
             __weak typeof(self) weakSelf = self;
-            
+
             [[DatasourceManager sharedInstance] loadWithAtomFeedUrl:self.componentModel.dsUrl parentModel:self.currentComponentModel completion:^(ComponentModel *componentModel) {
-                
+
                 if (componentModel != nil && [componentModel.childerns isNotEmpty]) {
                     weakSelf.dataSource = componentModel.childerns;
                     [weakSelf registerCarouselItems: componentModel.childerns];
@@ -127,7 +127,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
 - (void)updateDataArrayAndReload:(NSArray *)dataArray {
     self.dataSource = dataArray;
     if (dataArray.count > 0) {
-        
+
         //select model
         NSInteger selectedModelIndex = self.carouselView.initiallySelectedIndex;
         if (dataArray.count <= selectedModelIndex) {
@@ -150,7 +150,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
     _dataSource = dataSource;
     //TO DO: GET THE DATA SOURCE LIMIT FROM PLUGIN CONFIGURATION
     NSInteger dataSourceLimit = 10;
-    
+
     if (_dataSource.count > dataSourceLimit) {
         NSMutableArray *newDataSource = [[NSMutableArray alloc] initWithCapacity:dataSourceLimit];
         for (int index = 0; index < dataSourceLimit; index++) {
@@ -158,7 +158,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
         }
         _dataSource = newDataSource;
     }
-    
+
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (self.dataSource.count > 0) {
             self.borderView.hidden = NO;
@@ -166,7 +166,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
             self.borderView.hidden = YES;
         }
     });
-    
+
     self.carouselView.isRTL = self.isRTL;
     self.carouselView.pageControl.numberOfPages = self.dataSource.count;
     [self registerCarouselItems: self.dataSource];
@@ -189,7 +189,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
 }
 
 - (void)addRefreshTaskAfterDelay:(NSTimeInterval)delay{
-    
+
 }
 
 - (ComponentModel *)currentComponentModel {
@@ -221,7 +221,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
     if (!self.componentInitialized) {
         self.componentInitialized = YES;
         [self.view layoutIfNeeded];
-        
+
         [self loadComponent];
     }
 }
@@ -269,14 +269,14 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
 }
 
 - (UICollectionViewCell *)promotionView:(APPromotionView *)promotionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     CellModel *cellModel = self.dataSource[indexPath.row];
-    
+
     NSString *reuseIdentifier = [cellModel.identifier stringByAppendingFormat:@"_%@", cellModel.layoutStyle];
-    
+
     UniversalCollectionViewCell *cell = [promotionView dequeueReusableCellWithReuseIdentifier:cellModel.layoutStyle
                                                                                  forIndexPath:indexPath];
-    
+
     if (cell.componentViewController == nil) {
         cell.componentViewController = [ComponenttFactory componentViewControllerWithComponentModel:cellModel
                                                                                            andModel:cellModel.entry
@@ -284,7 +284,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
                                                                                            delegate:self.delegate
                                                                                parentViewController:self];
     }
-    
+
     if ([cell.componentViewController respondsToSelector:@selector(delegate)]) {
         cell.componentViewController.delegate = self;
     }
@@ -292,9 +292,9 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
         [cell.componentViewController setComponentModel:cellModel];
     }
     if ([cell.componentViewController respondsToSelector:@selector(setComponentDataSourceModel:)]) {
-        [cell.componentViewController setComponentDataSourceModel:cellModel]; 
+        [cell.componentViewController setComponentDataSourceModel:cellModel];
     }
-   
+
     return cell;
 }
 
@@ -305,7 +305,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
 
      UniversalCollectionViewCell *cell = (UniversalCollectionViewCell *)[self promotionView:promotionView
                                                                                   cellForItemAtIndexPath:indexPath];
-              
+
               if ([self.delegate respondsToSelector:@selector(componentViewController:didSelectModel:componentModel:atIndexPath:completion:)]) {
                   [self.delegate componentViewController:self
                                           didSelectModel:currentModel
@@ -313,13 +313,13 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
                                              atIndexPath:indexPath
                                               completion:nil];
               }
-              
-       
+
+
 }
 
 - (void)promotionViewDidEndScrollingAnimation:(APPromotionView *)promotionView{
     [[NSNotificationCenter defaultCenter] postNotificationName:kCarouselSwipedNotification object:self.selectedModel];
-    
+
     [self notifyComponentModelSelection:promotionView];
 }
 
@@ -345,7 +345,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
     NSInteger currentPageIndex = [promotionView currentPageIndex];
     APModel *currentModel = currentPageIndex < self.dataSource.count ? [self.dataSource objectAtIndex:currentPageIndex] : nil;
     if(currentModel) {
-        
+
     }
 }
 
@@ -359,40 +359,40 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
             break;
         }
     }
-    
+
     if (!currentCell && forceCreatingCell) {
         NSInteger indexOfModel = [self indexForModel:currentModel];
         NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:indexOfModel inSection:0];
         currentCell = (UniversalCollectionViewCell *)[self promotionView:promotionView cellForItemAtIndexPath:currentIndexPath];
     }
-    
+
     if (currentCell && [currentCell isKindOfClass:UniversalCollectionViewCell.class]) {
         if ([currentCell.componentViewController respondsToSelector:@selector(didStartDisplaying)]) {
             [currentCell.componentViewController didStartDisplaying];
         }
     }
-    
+
 }
 
 #pragma mark - Customizations
 
 - (void)customizePromotionView {
-    
+
 }
 
 - (void)updateBorderColor {
-    
+
 }
 
 - (void)customizeBackground {
-    
+
 }
 
 - (void)registerCarouselItems:(NSArray *)items {
     for (CellModel *localComponentModel in items) {
         NSString *layoutName = localComponentModel.layoutStyle;
         if ([layoutName isNotEmptyOrWhiteSpaces]) {
-            
+
             [self.carouselView registerClass:[UniversalCollectionViewCell class] forCellWithReuseIdentifier:layoutName];
         }
     }
@@ -426,7 +426,7 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
 #pragma mark - Private
 
 - (void)cancelRefreshTask{
-    
+
 }
 
 /**
@@ -434,14 +434,14 @@ NSString * const kCarouselSwipedNotification = @"CarouselSwipedNotification";
  */
 - (void)refreshComponent:(NSNotification *)notification{
     [self cancelRefreshTask];
-    
+
     [self reloadComponent];
 }
 
 - (void)selectCellWithModel:(APModel *)selectedModel
                   indexPath:(NSIndexPath *)indexPath{
     self.selectedModel = selectedModel;
-    
+
     UniversalCollectionViewCell *cell = (UniversalCollectionViewCell *)[self promotionView:self.carouselView
                                                                     cellForItemAtIndexPath:indexPath];
     cell.componentViewController.selectedModel = self.selectedModel;

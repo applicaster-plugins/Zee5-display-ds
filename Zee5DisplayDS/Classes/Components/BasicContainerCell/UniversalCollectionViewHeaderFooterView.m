@@ -7,7 +7,7 @@
 
 
 #import "UniversalCollectionViewHeaderFooterView.h"
-#import <ZeeHomeScreen/ZeeHomeScreen-Swift.h>
+#import <Zee5DisplayDS/Zee5DisplayDS-Swift.h>
 
 @implementation UniversalCollectionViewHeaderFooterView
 
