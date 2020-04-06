@@ -12,8 +12,8 @@
 #import "ComponentModelCustomization.h"
 
 #import <ApplicasterSDK/APAtomEntry.h>
-#import <ZeeHomeScreen/ZeeHomeScreen-Swift.h>
-#import <ZeeHomeScreen/ComponentsCustomization.h>
+#import <Zee5DisplayDS/Zee5DisplayDS-Swift.h>
+#import <Zee5DisplayDS/ComponentsCustomization.h>
 
 NSString *const kAttributesWidthPercentKey              = @"width_percent";
 NSString *const kAttributesWidthPixelKey                = @"width_pixel";
@@ -248,7 +248,7 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
 - (id)valueForAttributeKey:(NSString *)key
                  withModel:(ComponentModel *)model {
     id retVal = nil;
-    
+
     NSString *type = model.containerType;
     NSString *cellKey = model.cellKey;
     NSMutableDictionary *customizationDict = [[self customizationStyleForModel:model] mutableCopy];
@@ -264,7 +264,7 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
                                              forModel:model
                                               withKey:key];
     }
-    
+
     return retVal;
 }
 /*
@@ -301,7 +301,7 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
     id retVal = [ComponentsCustomization valueFromDictionary:dictionary
                                                       forModel:model
                                                        withKey:key];
-    
+
     return retVal;
 }
 
@@ -313,7 +313,7 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
     NSURL *retVal = nil;
 
     imageTag = [self valueForAttributeKey:key withModel:model];
-    
+
     if ([imageTag isNotEmptyOrWhiteSpaces]) {
         //model is conforming protocol APAtomEntryProtocol and use imageScale
         if ([model conformsToProtocol:@protocol(APAtomEntryProtocol)] && [imageScale isNotEmptyOrWhiteSpaces]) {
@@ -324,12 +324,12 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
                 imageURLString = [entryModel imageNamed:[NSString stringWithFormat:@"%@-%@",imageTag, imageScale]];
             }
         }
-        
+
         //We are trying to get image from tag for the rest of the cases
         if (imageURLString == nil && [model respondsToSelector:@selector(imageNamed:)]) {
             imageURLString = imageTag ? [(id)model imageNamed:imageTag] : nil;
         }
-        
+
         if ([imageURLString isNotEmptyOrWhiteSpaces]) {
             if ([[ZAAppConnector sharedInstance].connectivityDelegate isOffline]) {
                 retVal = [[APCacheManager shared] getLocalPathForUrlString:imageURLString useMd5UrlFilename:YES];
@@ -357,13 +357,13 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
                  attibuteKey:(NSString *)key
                    withModel:(NSObject *)model {
     NSDictionary *viewDictionary = [self valueForAttributeKey:key withModel:model];
-     
+
     if ([viewDictionary isNotEmpty]) {
         if ([viewDictionary[kAttributeBackgroundColorKey] isNotEmpty]) {
             NSString *colorString = viewDictionary[kAttributeBackgroundColorKey];
             view.backgroundColor = [UIColor colorWithRGBAHexString:colorString];
         }
-        
+
         //kAttributeCornerRadiusKey
         NSString *attributeValue = [self attributeValueForAttribute:kAttributeCornerRadiusKey
                                                attributesDictionary:viewDictionary
@@ -376,13 +376,13 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
         } else {
             view.layer.cornerRadius = 0;
         }
-        
+
         if (viewDictionary != nil) {
             UIColor *color = [self colorForAttributeKey:kAttributeBackgroundColorKey
                                          attributesDict:viewDictionary
                                               withModel:model
                                          componentState:ZeeComponentStateNormal];
-            
+
             if ([color isNotEmpty]) {
                 view.backgroundColor = color;
             }
@@ -391,30 +391,30 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
                                            attributesDict:viewDictionary
                                                 withModel:model
                                            componentState:ZeeComponentStateNormal];
-        
+
         if ([borderColor isNotEmpty]) {
             view.layer.borderColor = [borderColor CGColor];
         }
-        
+
         attributeValue = [self attributeValueForAttribute:kAttributeBorderWidthKey
                                      attributesDictionary:viewDictionary
                               defaultAttributesDictionary:nil
                                                 withModel:model
                                            componentState:ZeeComponentStateNormal];
-        
+
         if ([attributeValue isKindOfClass:[NSNumber class]]) {
             CGFloat borderWidth = [attributeValue floatValue];
             view.layer.borderWidth = borderWidth;
         } else {
             view.layer.borderWidth = 0;
         }
-        
+
         attributeValue = [self attributeValueForAttribute:kAttributeCornerRadiusKey
                                      attributesDictionary:viewDictionary
                               defaultAttributesDictionary:nil
                                                 withModel:model
                                            componentState:ZeeComponentStateNormal];
-        
+
         if ([attributeValue isKindOfClass:[NSNumber class]] ||
             [attributeValue isKindOfClass:[NSString class]]) {
             CGFloat cornerRadius = [attributeValue floatValue];
@@ -430,7 +430,7 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
    defaultAttributesDictionary:(NSDictionary *)defaultAttributesDictionary
                      withModel:(NSObject *)model
                   withDelegate:(UIViewController <ComponentProtocol> *)delegate {
-    
+
     if (button) {
         NSDictionary *attributesDictionary = [self valueForAttributeKey:attributeKey
                                                               withModel:model];
@@ -466,7 +466,7 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
                                         defaultAttributesDictionary:defaultAttributesDictionary
                                                           withModel:model
                                                      componentState:ZeeComponentStateNormal];
-        
+
         if ([attributeValue isKindOfClass:[NSString class]] &&
             [attributeValue isNotEmptyOrWhiteSpaces]) {
             UIImage *image = nil;
@@ -475,88 +475,88 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
             } else {
                 image = [UIImage imageNamed:attributeValue];
             }
-            
+
             [button setImage:image forState:UIControlStateNormal];
         }
-        
+
         //kAttributeImageNameKey
         attributeValue = [self attributeValueForAttribute:kAttributeImageNameKey
                                      attributesDictionary:attributesDictionary
                               defaultAttributesDictionary:defaultAttributesDictionary
                                                 withModel:model
                                            componentState:ZeeComponentStateHighlighted];
-        
+
         if ([attributeValue isKindOfClass:[NSString class]] &&
             [attributeValue isNotEmptyOrWhiteSpaces]) {
             [button setImage:[UIImage imageNamed:attributeValue]
                     forState:UIControlStateHighlighted];
         }
-        
+
         //kAttributeImageNameKey
         attributeValue = [self attributeValueForAttribute:kAttributeImageNameKey
                                      attributesDictionary:attributesDictionary
                               defaultAttributesDictionary:defaultAttributesDictionary
                                                 withModel:model
                                            componentState:ZeeComponentStateSelected];
-        
+
         if ([attributeValue isKindOfClass:[NSString class]] &&
             [attributeValue isNotEmptyOrWhiteSpaces]) {
             [button setImage:[UIImage imageNamed:attributeValue] forState:UIControlStateSelected];
         }
-        
+
         //kAttributeBackgroundImageNameKey
         attributeValue = [self attributeValueForAttribute:kAttributeBackgroundImageNameKey
                                      attributesDictionary:attributesDictionary
                               defaultAttributesDictionary:defaultAttributesDictionary
                                                 withModel:model
                                            componentState:ZeeComponentStateNormal];
-        
+
         if ([attributeValue isKindOfClass:[NSString class]] &&
             [attributeValue isNotEmptyOrWhiteSpaces]) {
             [button setBackgroundImage:[UIImage imageNamed:attributeValue] forState:UIControlStateNormal];
         }
 
-        
+
         //kAttributeLabelTitleKey
         UILabel *label = button.titleLabel;
         [self customizationForLabel:label
                        attributeKey:kAttributeLabelTitleKey
                           withModel:model
                      componentState:ZeeComponentStateNormal];
-        
+
         [button setAttributedTitle:label.attributedText forState:UIControlStateNormal];
-        
+
         //kAttributeBorderColorKey
         UIColor *borderColor = [self colorForAttributeKey:kAttributeBorderColorKey
                                            attributesDict:attributesDictionary
                                                 withModel:model
                                            componentState:ZeeComponentStateNormal];
-        
+
         if ([borderColor isNotEmpty]) {
             button.layer.borderColor = [borderColor CGColor];
         }
-        
+
         //kAttributeBorderWidthKey
         attributeValue = [self attributeValueForAttribute:kAttributeBorderWidthKey
                                      attributesDictionary:attributesDictionary
                               defaultAttributesDictionary:defaultAttributesDictionary
                                                 withModel:model
                                            componentState:ZeeComponentStateNormal];
-        
+
         if ([attributeValue isKindOfClass:[NSNumber class]]) {
             CGFloat borderWidth = [attributeValue floatValue];
             button.layer.borderWidth = borderWidth;
         } else {
             button.layer.borderWidth = 0;
         }
-        
+
         //kAttributeCornerRadiusKey
         attributeValue = [self attributeValueForAttribute:kAttributeCornerRadiusKey
                                      attributesDictionary:attributesDictionary
                               defaultAttributesDictionary:defaultAttributesDictionary
                                                 withModel:model
                                            componentState:ZeeComponentStateNormal];
-        
+
         if ([attributeValue isKindOfClass:[NSNumber class]]) {
             CGFloat cornerRadius = [attributeValue floatValue];
             button.layer.cornerRadius = cornerRadius;
@@ -572,16 +572,16 @@ NSString *const kScreenPickerMarginKey                 = @"screen_picker_margin"
              defaultAttributesDictionary:(NSDictionary *)defaultAttributesDictionary
                                withModel:(NSObject *)model
                           componentState:(ZeeComponentState)componentState {
-    
+
     NSString *customizationKey = [attributeKey stateAttributeKeyForComponentState:componentState];
     NSString *retVal = defaultAttributesDictionary[customizationKey];
-    
+
     if ([customizationKey isKindOfClass:[NSString class]] && attributesDictionary != nil) {
         retVal = [self valueOfCustomizationDictionary:attributesDictionary
                                              forModel:model
                                               withKey:customizationKey];
     }
-    
+
     if (retVal == nil && componentState != ZeeComponentStateNormal) {
         retVal =  [self attributeValueForAttribute:attributeKey
                               attributesDictionary:attributesDictionary
@@ -668,7 +668,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                                                   withKey:[key stateAttributeKeyForComponentState:ZeeComponentStateNormal]];
         }
     }
-    
+
     return retVal;
 }
 
@@ -690,9 +690,9 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                     withModel:(NSObject *)model
                componentState:(ZeeComponentState)componentState {
     if (label) {
-        
+
         if ([labelDictionary isNotEmpty]) {
-            
+
             id hiddenValue = [self valueOfCustomizationDictionary:labelDictionary
                                                          forModel:model
                                                           withKey:kAttributeLabelCustomizationHiddenKey];
@@ -702,7 +702,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                 shouldHide = hidden;
                 label.hidden = hidden;
 //                label.componentHidden = hidden;
-                
+
                 if (hidden) {
                     // If the text is hidden then we don't need to customize the label.
                     return;
@@ -713,19 +713,19 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                 shouldHide = hidden;
                 label.hidden = hidden;
 //                label.componentHidden = hidden;
-                
+
                 if (hidden) {
                     // If the text is hidden then we don't need to customize the label.
                     return;
                 }
             }
-            
+
             //Default Values
             BOOL ignoreDefaults = NO;
             if ([labelDictionary[kAttributeLabelCustomizationIgnoreDefaultsKey] isKindOfClass:[NSNumber class]]) {
                 ignoreDefaults = [labelDictionary[kAttributeLabelCustomizationIgnoreDefaultsKey] boolValue];
             }
-            
+
             if (!ignoreDefaults) {
 //                CGFloat fontSize = [CAUIBuilderRealScreenSizeHelper resizeFontSizeWithComponentModel:self
 //                                                                                               value:12];
@@ -734,7 +734,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                 [label setHidden:NO];
                 [label setLineBreakMode:NSLineBreakByTruncatingTail];
             }
-            
+
             if ([labelDictionary[kAttributeLabelCustomizationTextKey] isKindOfClass:[NSString class]] ||
                 [labelDictionary[kAttributeLabelCustomizationLocalizationKey] isKindOfClass:[NSString class]]) {
                 NSString *text = labelDictionary[kAttributeLabelCustomizationTextKey] ?: @"";
@@ -759,16 +759,16 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                 }
             } else if ([labelDictionary[kAttributeLabelCustomizationDataArrayKey] isKindOfClass:[NSString class]]) {
                 NSString *dataArrayKey = labelDictionary[kAttributeLabelCustomizationDataArrayKey];
-                
+
                 if ([model conformsToProtocol:@protocol(APAtomEntryProtocol)]) {
                     id modelData = [(id<APAtomEntryProtocol>)model extensions][dataArrayKey];
-                    
+
                     if ([modelData isKindOfClass:[NSArray class]]) {
                         NSArray *arrayData = (NSArray*)modelData;
-                        
+
                         if ([labelDictionary[kAttributeLabelCustomizationDataArrayPositionKey] isKindOfClass:[NSString class]]) {
                             NSInteger dataPosKey = [labelDictionary[kAttributeLabelCustomizationDataArrayPositionKey] integerValue];
-                            
+
                             if (arrayData.count > dataPosKey) {
                                 label.text = [arrayData objectAtIndex:dataPosKey];
                             } else {
@@ -778,7 +778,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                     }
                 }
             }
-            
+
             // if `hidden` key is set to `NO` do not hide if text is nil or zero length
             if (shouldHide) {
                 if (label.text == nil || label.text.length == 0) {
@@ -789,12 +789,12 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
 //                    label.componentHidden = NO;
                 }
             }
-            
+
             NSString *stringCase = [self valueFromDictionary:labelDictionary
                                                        model:model
                                                          key:kAttributeLabelCustomizationLetterCaseKey
                                               componentState:componentState];
-            
+
             if ([stringCase isKindOfClass:[NSString class]]) {
                 if ([stringCase isEqualToString:kAttributeLabelCustomizationLetterCaseLowerCaseKey]) {
                     label.text = [label.text lowercaseString];
@@ -804,7 +804,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                     label.text = [label.text capitalizedString];
                 }
             }
-            
+
             UIColor *color = [self colorForAttributeKey:kAttributeLabelCustomizationFontColorKey
                                          attributesDict:labelDictionary
                                               withModel:model
@@ -812,52 +812,52 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
             if ([color isNotEmpty]) {
                 label.textColor = color;
             }
-            
+
             NSMutableAttributedString *attributedString = nil;
             NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
             [style setLineBreakMode:label.lineBreakMode];
             [style setAlignment:label.textAlignment];
             [style setLineSpacing:lineSpacingMultiply * label.font.lineHeight];
-            
-            
+
+
             if (label.text.length > 0) {
                 attributedString = [[NSMutableAttributedString alloc] initWithString:label.text];
             }
-            
+
             UIFont *font = [self fontForAttributesDict:labelDictionary withModel:model fontSizeMultiply:fontSizeMultiply componentState:componentState];
             if (font != nil) {
                 [label setFont:font];
-                
+
                 if (attributedString && font) {
                     [attributedString addAttribute:NSFontAttributeName
                                              value:font
                                              range:NSMakeRange(0, [label.text length])];
                 }
             }
-            
+
             NSNumber *numberOfLines = [self valueFromDictionary:labelDictionary
                                                           model:model
                                                             key:kAttributeLabelCustomizationNumberOfLines
                                                  componentState:componentState];
-            
+
             if ([numberOfLines isKindOfClass:[NSNumber class]]) {
                 [label setNumberOfLines:[numberOfLines integerValue]];
             }
-            
+
             NSNumber *minimumScaleFactor = [self valueFromDictionary:labelDictionary
                                                                model:model
                                                                  key:kAttributeLabelCustomizationMinimumScaleFactor
                                                       componentState:componentState];
-            
+
             if ([minimumScaleFactor isKindOfClass:[NSNumber class]]) {
                 [label setMinimumScaleFactor:[minimumScaleFactor floatValue]];
             }
-            
+
             NSString *breakMode = [self valueFromDictionary:labelDictionary
                                                       model:model
                                                         key:kAttributeLabelCustomizationLineBreakModeKey
                                              componentState:componentState];
-            
+
             if ([breakMode isKindOfClass:[NSString class]]) {
                 NSLineBreakMode lineBreakMode = NSLineBreakByTruncatingTail;
                 if ([breakMode isEqualToString:kAttributeLabelCustomizationLineBreakModeHeadKey]) {
@@ -870,14 +870,14 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                 [style setLineBreakMode:lineBreakMode];
                 [label setLineBreakMode:lineBreakMode];
             }
-            
+
             NSString *textAlignment = [self valueFromDictionary:labelDictionary
                                                           model:model
                                                             key:kAttributeLabelCustomizationTextAlignmentModeKey
                                                  componentState:componentState];
-            
+
             if ([textAlignment isKindOfClass:[NSString class]]) {
-                
+
                 NSTextAlignment alignment = NSTextAlignmentLeft;
                 if ([textAlignment isEqualToString:kAttributeLabelCustomizationTextAlignmentModeLeftKey]) {
                     alignment = NSTextAlignmentLeft;
@@ -893,16 +893,16 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                 [label setTextAlignment:alignment];
                 [style setAlignment:alignment];
             }
-            
+
             BOOL needUseAttributeString = NO;
-            
+
             if (attributedString) {
-                
+
                 NSString *lineSpacing = [self valueFromDictionary:labelDictionary
                                                             model:model
                                                               key:kAttributeLabelCustomizationTextLineSpacingKey
                                                    componentState:componentState];
-                
+
                 if ([lineSpacing isKindOfClass:[NSNumber class]]) {
                     style.lineSpacing = [lineSpacing floatValue];
                     needUseAttributeString = YES;
@@ -925,7 +925,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                     style.maximumLineHeight = [maximumLineHeightString floatValue];
                     needUseAttributeString = YES;
                 }
-                
+
                 NSString *highlightedTextBackgroundColor = [self valueFromDictionary:labelDictionary
                                                                         model:model
                                                                           key:kAttributeLabelCustomizationHighlightTitleBackgroundColorKey
@@ -942,21 +942,21 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                                                         model:model
                                                           key:kAttributeLabelCustomizationTextKerningKey
                                                componentState:componentState];
-                
+
                 if ([kerning isKindOfClass:[NSNumber class]]) {
                     [attributedString addAttribute:NSKernAttributeName
                                              value:kerning
                                              range:NSMakeRange(0, [label.text length])];
                     needUseAttributeString = YES;
                 }
-                
+
                 NSDictionary *shadowData = [self valueFromDictionary:labelDictionary
                                                                model:model
                                                                  key:kAttributeLabelCustomizationTextShadowKey
                                                       componentState:componentState];
-                
+
                 NSShadow *shadow = [[NSShadow alloc] init];
-                
+
                 if ([shadowData isKindOfClass:[NSDictionary class]]) {
                     NSDictionary *shadowOffsetData = [self valueFromDictionary:shadowData
                                                                          model:model
@@ -973,28 +973,28 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                                                                   componentState:componentState];
                         if ([shadowOffsetWidth isKindOfClass:[NSNumber class]] &&
                             [shadowOffsetHeight isKindOfClass:[NSNumber class]]) {
-                            
+
                             shadow.shadowOffset = CGSizeMake([shadowOffsetData[kAttributeLabelCustomizationTextShadowOffsetWidthKey] floatValue],
                                                              [shadowOffsetData[kAttributeLabelCustomizationTextShadowOffsetHeightKey] floatValue]);
-                            
+
                         }
                     }
                 }
-                
+
                 NSNumber *shadowBlurRadius = [self valueFromDictionary:shadowData
                                                                  model:model
                                                                    key:kAttributeLabelCustomizationTextShadowBlurRadiusKey
                                                         componentState:componentState];
-                
+
                 if ([shadowBlurRadius isKindOfClass:[NSNumber class]]) {
                     shadow.shadowBlurRadius = [shadowBlurRadius floatValue] ;
                 }
-                
+
                 NSString *shadowColor = [self valueFromDictionary:shadowData
                                                             model:model
                                                               key:kAttributeLabelCustomizationTextShadowColorKey
                                                    componentState:componentState];
-                
+
                 if ([shadowColor isKindOfClass:[NSString class]]) {
                     shadow.shadowColor = [UIColor colorWithRGBAHexString:shadowColor] ;
                 }
@@ -1003,15 +1003,15 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                                          range:NSMakeRange(0, [label.text length])];
                 needUseAttributeString = YES;
             }
-            
+
             if (needUseAttributeString) {
                 [attributedString addAttribute:NSParagraphStyleAttributeName
                                          value:style
                                          range:NSMakeRange(0, [label.text length])];
                 label.attributedText = attributedString;
-                
+
             }
-            
+
             if ([labelDictionary[kAttributeBackgroundColorKey] isNotEmpty]) {
                 label.backgroundColor = [self colorForAttributeKey:kAttributeBackgroundColorKey
                                                     attributesDict:labelDictionary
@@ -1053,7 +1053,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
              fontSizeMultiply:(CGFloat)fontSizeMultiply
           lineSpacingMultiply:(CGFloat)lineSpacingMultiply
                componentState:(ZeeComponentState)componentState {
- 
+
     NSString *type = model.containerType;
     NSString *cellKey = model.cellKey;
     NSDictionary *cellDict = [CustomizationManager dataForZappLayout:cellKey zappComponentType:type zappFamily:@"FAMILY_GANGES"];
@@ -1068,7 +1068,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
 
 - (NSDictionary *)componentStylesMappingDictionary {
     NSDictionary *retVal = nil;
-    
+
     NSArray<ZPPluginModel *> *pluginModels = [ZPPluginManager pluginModels:@"cell_style_family"];
     for (ZPPluginModel *pluginModel in pluginModels) {
         NSBundle *bundle = [ZPPluginManager bundleForModelClass:pluginModel];
@@ -1076,7 +1076,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
             retVal = [NSDictionary dictionaryWithContentsOfFile:[bundle pathForResource:@"ZeeHomeScreen_ZLComponentsMapping" ofType:@"plist"]];
         }
     }
-    
+
     return retVal;
 }
 
@@ -1087,38 +1087,38 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
     if (textView) {
         textView.hidden = NO;
         textView.textColor = [UIColor purpleColor];
-        
+
         NSDictionary *textViewDictionary = [self valueForAttributeKey:key withModel:model];
         if ([textViewDictionary isNotEmpty]) {
-            
+
             if ([textViewDictionary[kAttributeLabelCustomizationHiddenKey] isKindOfClass:[NSNumber class]]) {
                 BOOL hidden = [textViewDictionary[kAttributeLabelCustomizationHiddenKey] boolValue];
                 textView.hidden = hidden;
 //                textView.componentHidden = hidden;
-                
+
                 if (hidden) {
                     // If the element is hidden then we don't need to customize the label.
                     return;
                 }
             }
-            
+
             NSString *fontName = [self valueFromDictionary:textViewDictionary
                                                      model:model
                                                        key:kAttributeLabelCustomizationFontNameKey
                                             componentState:ZeeComponentStateNormal];
-            
+
             NSString *fontSize = [self valueFromDictionary:textViewDictionary
                                                      model:model
                                                        key:kAttributeLabelCustomizationFontSizeKey
                                             componentState:ZeeComponentStateNormal];
-            
+
             if (fontName && fontSize) {
                 CGFloat fontSizeFloat = [fontSize floatValue] * fontSizeMultiply;
                 UIFont *newFont = [UIFont fontWithName:fontName
                                                   size:fontSizeFloat];
                 [textView setFont:newFont];
             }
-            
+
             UIColor *textColor = [self colorForAttributeKey:kAttributeLabelCustomizationFontColorKey
                                              attributesDict:textViewDictionary
                                                   withModel:model
@@ -1126,27 +1126,27 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
             if (textColor) {
                 [textView setTextColor:textColor];
             }
-            
+
             NSString *insetTop = [self valueFromDictionary:textViewDictionary
                                                      model:model
                                                        key:kAttributesInsetTopKey
                                             componentState:ZeeComponentStateNormal];
-            
+
             NSString *insetLeft = [self valueFromDictionary:textViewDictionary
                                                       model:model
                                                         key:kAttributesInsetLeftKey
                                              componentState:ZeeComponentStateNormal];
-            
+
             NSString *insetBottom = [self valueFromDictionary:textViewDictionary
                                                         model:model
                                                           key:kAttributesInsetBottomKey
                                                componentState:ZeeComponentStateNormal];
-            
+
             NSString *insetRight = [self valueFromDictionary:textViewDictionary
                                                        model:model
                                                          key:kAttributesInsetRightKey
                                               componentState:ZeeComponentStateNormal];
-            
+
             if (insetTop && insetLeft && insetRight && insetBottom) {
                 UIEdgeInsets insets = UIEdgeInsetsMake([textViewDictionary[kAttributesInsetTopKey] floatValue],
                                                        [textViewDictionary[kAttributesInsetLeftKey] floatValue],
@@ -1154,11 +1154,11 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                                                        [textViewDictionary[kAttributesInsetRightKey] floatValue]);
                 textView.contentInset = insets;
             }
-            
+
             if ([textViewDictionary[kAttributeLabelCustomizationTextKey] isKindOfClass:[NSString class]] ||
                 [textViewDictionary[kAttributeLabelCustomizationLocalizationKey] isKindOfClass:[NSString class]]) {
                 NSString *text = textViewDictionary[kAttributeLabelCustomizationTextKey] ?: @"";
-                
+
                 if ([ZAAppConnector sharedInstance].localizationDelegate && [textViewDictionary[kAttributeLabelCustomizationLocalizationKey]isKindOfClass:[NSString class]]) {
                     text = [[ZAAppConnector sharedInstance].localizationDelegate localizationStringByKey:textViewDictionary[kAttributeLabelCustomizationLocalizationKey]
                                                                                            defaultString:text];
@@ -1184,7 +1184,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                         withModel:(NSObject *)model
                    componentState:(ZeeComponentState)componentState {
     if (imageView) {
-        
+
         if ([attributesDictionary[kAttributeLabelCustomizationDataKey] isKindOfClass:[NSString class]]) {
             NSString *dataKey = attributesDictionary[kAttributeLabelCustomizationDataKey];
             if ([model conformsToProtocol:@protocol(APAtomEntryProtocol)]) {
@@ -1198,35 +1198,35 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                 }
             }
         }
-        
+
         if ([attributesDictionary[kAttributeLabelCustomizationHiddenKey] isKindOfClass:[NSNumber class]]) {
             BOOL hidden = [attributesDictionary[kAttributeLabelCustomizationHiddenKey] boolValue];
             imageView.hidden = hidden;
 //            imageView.componentHidden = hidden;
-            
+
             if (hidden) {
                 // If the element is hidden then we don't need to customize the label.
                 return;
             }
         }
-        
+
         NSString *attributeValue = [self attributeValueForAttribute:kAttributeImageNameKey
                                                attributesDictionary:attributesDictionary
                                         defaultAttributesDictionary:defaultAttributesDictionary
                                                           withModel:model
                                                      componentState:componentState];
-        
+
         if ([attributeValue isKindOfClass:[NSString class]] &&
             [attributeValue isNotEmptyOrWhiteSpaces]) {
             [imageView setImage:[UIImage imageNamed:attributeValue]];
         }
-        
+
         if (attributesDictionary != nil) {
             UIColor *color = [self colorForAttributeKey:kAttributeBackgroundColorKey
                                          attributesDict:attributesDictionary
                                               withModel:model
                                          componentState:componentState];
-            
+
             if ([color isNotEmpty]) {
                 imageView.backgroundColor = color;
             }
@@ -1235,30 +1235,30 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                                            attributesDict:attributesDictionary
                                                 withModel:model
                                            componentState:componentState];
-        
+
         if ([borderColor isNotEmpty]) {
             imageView.layer.borderColor = [borderColor CGColor];
         }
-        
+
         attributeValue = [self attributeValueForAttribute:kAttributeBorderWidthKey
                                      attributesDictionary:attributesDictionary
                               defaultAttributesDictionary:defaultAttributesDictionary
                                                 withModel:model
                                            componentState:componentState];
-        
+
         if ([attributeValue isKindOfClass:[NSNumber class]]) {
             CGFloat borderWidth = [attributeValue floatValue];
             imageView.layer.borderWidth = borderWidth;
         } else {
             imageView.layer.borderWidth = 0;
         }
-        
+
         attributeValue = [self attributeValueForAttribute:kAttributeCornerRadiusKey
                                      attributesDictionary:attributesDictionary
                               defaultAttributesDictionary:defaultAttributesDictionary
                                                 withModel:model
                                            componentState:componentState];
-        
+
         if ([attributeValue isKindOfClass:[NSNumber class]] ||
             [attributeValue isKindOfClass:[NSString class]]) {
             CGFloat cornerRadius = [attributeValue floatValue];
@@ -1266,8 +1266,8 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
         } else {
             imageView.layer.cornerRadius = 0;
         }
-        
-        
+
+
         attributeValue = [self attributeValueForAttribute:kAttributeMaskImageNameKey
                                      attributesDictionary:attributesDictionary
                               defaultAttributesDictionary:defaultAttributesDictionary
@@ -1305,7 +1305,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                         withModel:(NSObject *)model
                    componentState:(ZeeComponentState)componentState {
     NSString *customizationKey = [attributeKey stateAttributeKeyForComponentState:componentState];
- 
+
     UIColor *retVal = nil;
     if ([customizationKey isKindOfClass:[NSString class]]) {
 
@@ -1355,23 +1355,23 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                  fontSizeMultiply:(CGFloat)fontSizeMultiply
                    componentState:(ZeeComponentState)componentState {
     UIFont *result = nil;
-    
+
     NSString *fontName = [self valueFromDictionary:attributesDict
                                              model:model
                                                key:kAttributeLabelCustomizationFontNameKey
                                     componentState:componentState];
-    
+
     NSString *fontSize = [self valueFromDictionary:attributesDict
                                              model:model
                                                key:kAttributeLabelCustomizationFontSizeKey
                                     componentState:componentState];
-    
+
     if ([fontSize isKindOfClass:[NSString class]]) {
         CGFloat fontSizeFloat = [fontSize floatValue] * fontSizeMultiply;
 //        fontSizeFloat = [CAUIBuilderRealScreenSizeHelper resizeFontSizeWithComponentModel:self value:fontSizeFloat];
-        
+
         UIFont *font = [UIFont systemFontOfSize:fontSizeFloat];
-        
+
         if ([fontName isKindOfClass:[NSString class]]) {
             font = [UIFont fontWithName:fontName size:fontSizeFloat] ?: font;
             if (!font) {
@@ -1381,7 +1381,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
 
         result = font;
     }
-    
+
     return result;
 }
 
@@ -1397,7 +1397,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                                 forKey:(NSString *)key {
     NSMutableArray *retVal = [NSMutableArray new];
     NSArray *allKeys = [dictionary allKeys];
-    
+
     for (NSString *currentKey in allKeys) {
         if ([currentKey isEqualToString:key]) {
 //            NSString *result = [self valueOfCustomizationDictionary:dictionary
@@ -1411,7 +1411,7 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
                                                                  forKey:key]];
         }
     }
-    
+
     return [retVal copy];
 }
 
@@ -1431,32 +1431,32 @@ NSString *const kAttributeLabelCustomizationIgnoreDefaultsKey = @"ignore_default
 //            retVal = [fullDict copy];
 //        }
 //    }
-    
+
     return retVal;
 }
 
 - (UIColor *)modelColorWithFallbackLogic:(NSObject *)model {
     UIColor *retVal = nil;
-    
+
     if ([model conformsToProtocol:@protocol(APUICustomizationProtocol)]) {
         NSString *colorString = nil;
-        
+
         if ([model respondsToSelector:@selector(modelColor)]) {
             colorString = [(NSObject <APUICustomizationProtocol> *)model modelColor];
         }
-        
+
         if (![colorString isKindOfClass:[NSString class]] && [colorString length] == 0) {
             if ([model conformsToProtocol:@protocol(APUICustomizationExtendedProtocol)]) {
                 if ([model respondsToSelector:@selector(modelShowCategoryColor)]) {
                     colorString = [(NSObject <APUICustomizationExtendedProtocol> *)model modelShowCategoryColor];
                 }
-                
+
                 if (![colorString isKindOfClass:[NSString class]] && [colorString length] == 0) {
                     colorString = [(NSObject <APUICustomizationExtendedProtocol> *)model modelTopLevelCategoryColor];
                 }
             }
         }
-        
+
         if ([colorString isKindOfClass:[NSString class]] && [colorString length] > 0) {
             retVal = [UIColor colorWithARGBHexString:colorString];
         }

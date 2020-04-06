@@ -7,8 +7,8 @@
 
 #import "UniversalCollectionViewCell.h"
 #import "CarouselViewController.h"
-#import <ZeeHomeScreen/ComponenttFactory.h>
-#import <ZeeHomeScreen/ZeeHomeScreen-Swift.h>
+#import <Zee5DisplayDS/ComponenttFactory.h>
+#import <Zee5DisplayDS/Zee5DisplayDS-Swift.h>
 
 @interface UniversalCollectionViewCell()
 
@@ -24,14 +24,14 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-    
+
     }
     return self;
 }
 
 -(void)prepareForReuse {
     [super prepareForReuse];
-    
+
     if ([self.componentViewController respondsToSelector:@selector(prepareComponentForReuse)]) {
         [self.componentViewController prepareComponentForReuse];
     }
@@ -47,8 +47,8 @@
                  delegate:(nullable id<ComponentDelegate>)delegate
      parentViewController:(nullable UIViewController *)parentViewController
 {
-    
-    
+
+
 //    if (self.componentViewController == nil) {
         self.componentViewController = [ComponenttFactory componentViewControllerWithComponentModel:componentModel
                                                                                            andModel:model
