@@ -96,7 +96,7 @@
 
     Class classFromName = NSClassFromString(className);
     if (!classFromName) {
-        NSString *classNameWithModule = [NSString stringWithFormat:@"ZeeHomeScreen.%@", className];
+        NSString *classNameWithModule = [NSString stringWithFormat:@"Zee5Common.%@", className];
         classFromName = NSClassFromString(classNameWithModule);
     }
 
