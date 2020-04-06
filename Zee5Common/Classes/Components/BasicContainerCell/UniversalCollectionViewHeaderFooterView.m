@@ -7,7 +7,7 @@
 
 
 #import "UniversalCollectionViewHeaderFooterView.h"
-#import <Zee5DisplayDS/Zee5DisplayDS-Swift.h>
+#import <Zee5Common/Zee5Common-Swift.h>
 
 @implementation UniversalCollectionViewHeaderFooterView
 
@@ -25,7 +25,7 @@
 }
 
 -(void)setBackgroundImage:(NSString *) imageName {
-    
+
     UIImage *image = [UIImage imageNamed:imageName];
 //    if (self.width > image.size.width) {
 //        //resize image to cell size

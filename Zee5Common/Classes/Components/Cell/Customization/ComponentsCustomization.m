@@ -10,9 +10,9 @@
 #import <ApplicasterSDK/APAtomEntry.h>
 #import <ApplicasterSDK/APAtomFeed.h>
 #import <ApplicasterSDK/APCategory.h>
-#import <Zee5DisplayDS/AbstractModel.h>
-#import <Zee5DisplayDS/CommandPattern.h>
-#import <Zee5DisplayDS/Zee5DisplayDS-Swift.h>
+#import <Zee5Common/AbstractModel.h>
+#import <Zee5Common/CommandPattern.h>
+#import <Zee5Common/Zee5Common-Swift.h>
 @import ApplicasterSDK;
 
 @implementation ComponentsCustomization

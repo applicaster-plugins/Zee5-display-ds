@@ -8,12 +8,12 @@
 @import ApplicasterSDK;
 
 #import "ComponenttFactory.h"
-#import <Zee5DisplayDS/Zee5DisplayDS-Swift.h>
+#import <Zee5Common/Zee5Common-Swift.h>
 
 @protocol ComponentDelegate;
 
 @interface ComponenttFactory (){
-    
+
 }
 
 @end
@@ -27,44 +27,44 @@
                                                                                forView:(UIView *)view
                                                                               delegate:(id <ComponentDelegate>) delegate
                                                                   parentViewController:(UIViewController *)parentViewController {
-    
+
     UIViewController <ComponentProtocol>  *retVal = [self viewControllerForComponentModel:componentModel
                                                                                   withModel:(APModel *)model];
     if (retVal != nil) {
-        
+
         // If the view (container) is not pass or nil use the parent view.
         if (view == nil) {
             view = parentViewController.view;
         }
-        
+
         if (view) {
             if (delegate) {
                 if ([retVal respondsToSelector:@selector(delegate)]) {
                     retVal.delegate = delegate;
                 }
             }
-            
+
             UIEdgeInsets paddingInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0);
 //            [CAUIBuilderRealScreenSizeHelper componentPaddingWithComponentModel:componentModel     model:model];
             [view removeAllSubviews];
             [view addSubview:retVal.view];
-            
+
             [retVal.view matchParent];
             [retVal.view setInsetsFromParent:paddingInsets];
         }
-        
+
         if (parentViewController) {
             [parentViewController addChildViewController:retVal];
             [retVal didMoveToParentViewController:parentViewController];
         }
-        
+
         retVal.view.backgroundColor = [UIColor clearColor];
     }
     else {
         APLoggerError(@"Can't create component - %@", componentModel);
     }
-    
-    
+
+
     return retVal;
 }
 
@@ -90,7 +90,7 @@
 
 + (UIViewController <ComponentProtocol> *)viewControllerFromXibName:(NSString *)nibName
                                                        forType:(NSString *)type {
-    
+
     NSString *className = [self viewControllerClassNameforType:type];
     UIViewController <ComponentProtocol> *viewController = nil;
 
@@ -106,7 +106,7 @@
         viewController = [[classFromName alloc] initWithNibName:nibName
                                                          bundle:bundle];
     }
-    
+
     //Get xibs from cell style family plugins
     if (viewController == nil) {
         NSArray<ZPPluginModel *> *pluginModels = [ZPPluginManager pluginModels:@"cell_style_family"];
@@ -115,13 +115,13 @@
             if ([bundle pathForResource:nibName ofType:@"nib"] != nil) {
                 viewController = [[classFromName alloc] initWithNibName:nibName bundle:bundle];
             }
-            
+
             if (viewController) {
                 break;
             }
         }
     }
-    
+
     if (viewController == nil && classFromName != nil) {
         viewController = [[classFromName alloc] init];
     }
@@ -135,7 +135,7 @@
 //        }
 //    }
 
-    
+
     NSArray *providers = [[ZAAppConnector sharedInstance].pluginsDelegate.generalPluginsManager getPluginsForFamilyType: ZPGeneralPluginsFamilyUi];
     for (id<ZPGeneralPluginUIProtocol> provider in providers) {
         NSMutableDictionary *optionsDict = [NSMutableDictionary dictionaryWithDictionary:@{@"xibKeyName": nibName,
@@ -156,12 +156,12 @@
                                                                   withModel:(APModel *)model {
     UIViewController <ComponentProtocol> *viewController = nil;
     NSString *xibKeyName = componentModel.layoutStyle;
-    
+
     if ([xibKeyName isNotEmptyOrWhiteSpaces]) {
 
         viewController = [self viewControllerFromXibName:xibKeyName
                                                  forType:componentModel.type];
-        
+
         if ([viewController conformsToProtocol:@protocol(ComponentProtocol)]) {
             if ([(UIViewController <ComponentProtocol> *) viewController respondsToSelector:@selector(setComponentModel:)]) {
                 [(UIViewController <ComponentProtocol> *) viewController setComponentModel:componentModel];

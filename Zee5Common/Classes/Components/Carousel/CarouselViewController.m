@@ -7,8 +7,8 @@
 
 #import "CarouselViewController.h"
 #import "UniversalCollectionViewCell.h"
-#import <Zee5DisplayDS/Zee5DisplayDS-Swift.h>
-#import <Zee5DisplayDS/ComponenttFactory.h>
+#import <Zee5Common/Zee5Common-Swift.h>
+#import <Zee5Common/ComponenttFactory.h>
 @import ApplicasterUIKit;
 @import ApplicasterSDK;
 

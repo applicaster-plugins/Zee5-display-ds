@@ -12,8 +12,8 @@
 #import "ComponentModelCustomization.h"
 
 #import <ApplicasterSDK/APAtomEntry.h>
-#import <Zee5DisplayDS/Zee5DisplayDS-Swift.h>
-#import <Zee5DisplayDS/ComponentsCustomization.h>
+#import <Zee5Common/Zee5Common-Swift.h>
+#import <Zee5Common/ComponentsCustomization.h>
 
 NSString *const kAttributesWidthPercentKey              = @"width_percent";
 NSString *const kAttributesWidthPixelKey                = @"width_pixel";
