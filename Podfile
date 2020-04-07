@@ -10,6 +10,7 @@ def shared
 	pod 'ApplicasterSDK'
 	pod 'ApplicasterUIKit'
 	pod 'ZappSDK'
+	pod 'MBProgressHUD'
 
 end
 
